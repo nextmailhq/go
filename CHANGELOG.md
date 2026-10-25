@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.0.3
+
+- Withdraws v0.0.2, which declared another module path and so never installed as `nextmail.sh`, and this release itself, so `go get nextmail.sh` installs 0.0.1. Nothing else changed.
+
 ## 0.0.1
 
 The first release of the Go SDK: the module `nextmail.sh`, with the package `nextmail`. It needs Go 1.24 or later and nothing outside the standard library. It has a method for each of the 746 methods of the TypeScript SDK, in the same 53 namespaces and under the same names in Go's casing, as fields of the client: `client.Emails.Send`, `client.Threads.List`, `client.Domains.Verify`. They cover everything from sending and reading mail to contacts, broadcasts, automations, the calendar, booking pages, tasks and the settings of a workspace, and a parity check proves that each one sends the same request as its TypeScript twin.
