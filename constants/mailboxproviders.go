@@ -3,16 +3,17 @@
 package constants
 
 const (
-	MailboxProvidersGmail    = "gmail"
-	MailboxProvidersOutlook  = "outlook"
-	MailboxProvidersYahoo    = "yahoo"
-	MailboxProvidersAol      = "aol"
-	MailboxProvidersIcloud   = "icloud"
-	MailboxProvidersFastmail = "fastmail"
-	MailboxProvidersZoho     = "zoho"
-	MailboxProvidersOther    = "other"
+	MailboxProvidersGmail     = "gmail"
+	MailboxProvidersOutlook   = "outlook"
+	MailboxProvidersYahoo     = "yahoo"
+	MailboxProvidersAol       = "aol"
+	MailboxProvidersIcloud    = "icloud"
+	MailboxProvidersFastmail  = "fastmail"
+	MailboxProvidersZoho      = "zoho"
+	MailboxProvidersOpenemail = "openemail"
+	MailboxProvidersOther     = "other"
 )
 
 func MailboxProvidersValues() []string {
-	return []string{MailboxProvidersGmail, MailboxProvidersOutlook, MailboxProvidersYahoo, MailboxProvidersAol, MailboxProvidersIcloud, MailboxProvidersFastmail, MailboxProvidersZoho, MailboxProvidersOther}
+	return []string{MailboxProvidersGmail, MailboxProvidersOutlook, MailboxProvidersYahoo, MailboxProvidersAol, MailboxProvidersIcloud, MailboxProvidersFastmail, MailboxProvidersZoho, MailboxProvidersOpenemail, MailboxProvidersOther}
 }

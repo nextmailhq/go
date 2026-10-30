@@ -7,8 +7,9 @@ const (
 	AddressForwardStatusesPending = "pending"
 	AddressForwardStatusesRefused = "refused"
 	AddressForwardStatusesPaused  = "paused"
+	AddressForwardStatusesBounced = "bounced"
 )
 
 func AddressForwardStatusesValues() []string {
-	return []string{AddressForwardStatusesLive, AddressForwardStatusesPending, AddressForwardStatusesRefused, AddressForwardStatusesPaused}
+	return []string{AddressForwardStatusesLive, AddressForwardStatusesPending, AddressForwardStatusesRefused, AddressForwardStatusesPaused, AddressForwardStatusesBounced}
 }

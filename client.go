@@ -19,6 +19,7 @@ type (
 	KeysService               service
 	AddressesService          service
 	LanguagesService          service
+	LiveEventsService         service
 	EmailsService             service
 	TemplatesService          service
 	TrackingService           service
@@ -46,6 +47,7 @@ type (
 	RolesService              service
 	MembersService            service
 	SuppressionsService       service
+	TrafficService            service
 	SendingService            service
 	FilesService              service
 	KnowledgeService          service
@@ -67,6 +69,8 @@ type (
 	ConnectorsService         service
 	ConnectedMailboxesService service
 	SegmentsService           service
+	ShareLinksService         service
+	SharedService             service
 )
 
 type Client struct {
@@ -75,6 +79,7 @@ type Client struct {
 	Keys               *KeysService
 	Addresses          *AddressesService
 	Languages          *LanguagesService
+	LiveEvents         *LiveEventsService
 	Emails             *EmailsService
 	Templates          *TemplatesService
 	Tracking           *TrackingService
@@ -102,6 +107,7 @@ type Client struct {
 	Roles              *RolesService
 	Members            *MembersService
 	Suppressions       *SuppressionsService
+	Traffic            *TrafficService
 	Sending            *SendingService
 	Files              *FilesService
 	Knowledge          *KnowledgeService
@@ -123,6 +129,8 @@ type Client struct {
 	Connectors         *ConnectorsService
 	ConnectedMailboxes *ConnectedMailboxesService
 	Segments           *SegmentsService
+	ShareLinks         *ShareLinksService
+	Shared             *SharedService
 
 	common service
 }
@@ -149,6 +157,7 @@ func New(opts ...ClientOption) *Client {
 	client.Keys = (*KeysService)(&client.common)
 	client.Addresses = (*AddressesService)(&client.common)
 	client.Languages = (*LanguagesService)(&client.common)
+	client.LiveEvents = (*LiveEventsService)(&client.common)
 	client.Emails = (*EmailsService)(&client.common)
 	client.Templates = (*TemplatesService)(&client.common)
 	client.Tracking = (*TrackingService)(&client.common)
@@ -176,6 +185,7 @@ func New(opts ...ClientOption) *Client {
 	client.Roles = (*RolesService)(&client.common)
 	client.Members = (*MembersService)(&client.common)
 	client.Suppressions = (*SuppressionsService)(&client.common)
+	client.Traffic = (*TrafficService)(&client.common)
 	client.Sending = (*SendingService)(&client.common)
 	client.Files = (*FilesService)(&client.common)
 	client.Knowledge = (*KnowledgeService)(&client.common)
@@ -197,6 +207,8 @@ func New(opts ...ClientOption) *Client {
 	client.Connectors = (*ConnectorsService)(&client.common)
 	client.ConnectedMailboxes = (*ConnectedMailboxesService)(&client.common)
 	client.Segments = (*SegmentsService)(&client.common)
+	client.ShareLinks = (*ShareLinksService)(&client.common)
+	client.Shared = (*SharedService)(&client.common)
 
 	return client
 }

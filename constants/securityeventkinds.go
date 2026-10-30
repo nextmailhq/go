@@ -23,6 +23,8 @@ const (
 	SecurityEventKindsTwoFactorRequirementChanged = "two-factor-requirement-changed"
 	SecurityEventKindsAddressPasswordSet          = "address-password-set"
 	SecurityEventKindsAddressPasswordRemoved      = "address-password-removed"
+	SecurityEventKindsCalendarLoginCreated        = "calendar-login-created"
+	SecurityEventKindsCalendarLoginRevoked        = "calendar-login-revoked"
 	SecurityEventKindsDirectorySyncConnected      = "directory-sync-connected"
 	SecurityEventKindsDirectorySyncDisconnected   = "directory-sync-disconnected"
 	SecurityEventKindsDirectorySyncTokenRotated   = "directory-sync-token-rotated"
@@ -35,5 +37,5 @@ const (
 )
 
 func SecurityEventKindsValues() []string {
-	return []string{SecurityEventKindsSignIn, SecurityEventKindsSessionRevoked, SecurityEventKindsSessionsRevoked, SecurityEventKindsPasswordChanged, SecurityEventKindsPasswordReset, SecurityEventKindsTwoFactorEnabled, SecurityEventKindsTwoFactorDisabled, SecurityEventKindsPasskeyAdded, SecurityEventKindsPasskeyRemoved, SecurityEventKindsMemberAdded, SecurityEventKindsMemberRemoved, SecurityEventKindsMemberRoleChanged, SecurityEventKindsInvitationSent, SecurityEventKindsInvitationRevoked, SecurityEventKindsRoleCreated, SecurityEventKindsRoleChanged, SecurityEventKindsRoleDeleted, SecurityEventKindsTwoFactorRequirementChanged, SecurityEventKindsAddressPasswordSet, SecurityEventKindsAddressPasswordRemoved, SecurityEventKindsDirectorySyncConnected, SecurityEventKindsDirectorySyncDisconnected, SecurityEventKindsDirectorySyncTokenRotated, SecurityEventKindsDirectorySyncChanged, SecurityEventKindsConnectorConnected, SecurityEventKindsConnectorDisconnected, SecurityEventKindsConnectorChanged, SecurityEventKindsOwnershipOffered, SecurityEventKindsOwnershipTransferred}
+	return []string{SecurityEventKindsSignIn, SecurityEventKindsSessionRevoked, SecurityEventKindsSessionsRevoked, SecurityEventKindsPasswordChanged, SecurityEventKindsPasswordReset, SecurityEventKindsTwoFactorEnabled, SecurityEventKindsTwoFactorDisabled, SecurityEventKindsPasskeyAdded, SecurityEventKindsPasskeyRemoved, SecurityEventKindsMemberAdded, SecurityEventKindsMemberRemoved, SecurityEventKindsMemberRoleChanged, SecurityEventKindsInvitationSent, SecurityEventKindsInvitationRevoked, SecurityEventKindsRoleCreated, SecurityEventKindsRoleChanged, SecurityEventKindsRoleDeleted, SecurityEventKindsTwoFactorRequirementChanged, SecurityEventKindsAddressPasswordSet, SecurityEventKindsAddressPasswordRemoved, SecurityEventKindsCalendarLoginCreated, SecurityEventKindsCalendarLoginRevoked, SecurityEventKindsDirectorySyncConnected, SecurityEventKindsDirectorySyncDisconnected, SecurityEventKindsDirectorySyncTokenRotated, SecurityEventKindsDirectorySyncChanged, SecurityEventKindsConnectorConnected, SecurityEventKindsConnectorDisconnected, SecurityEventKindsConnectorChanged, SecurityEventKindsOwnershipOffered, SecurityEventKindsOwnershipTransferred}
 }

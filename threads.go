@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"nextmail.sh/internal/paths"
+	"nextmail.sh/internal/protocol"
 	"nextmail.sh/internal/query"
 )
 
@@ -183,6 +184,12 @@ func (s *ThreadsService) GetDelivery(ctx context.Context, id string, opts ...Req
 	})
 }
 
+func (s *ThreadsService) ListAutomations(ctx context.Context, id string, opts ...RequestOption) ([]Object, error) {
+	o := newCallOptions("threads.listAutomations", opts)
+
+	return s.t.objects(ctx, o, call{path: paths.ThreadAutomations, params: []any{"id", id}})
+}
+
 func (s *ThreadsService) ListNotes(ctx context.Context, id string, opts ...RequestOption) ([]Object, error) {
 	o := newCallOptions("threads.listNotes", opts)
 
@@ -238,6 +245,26 @@ func (s *ThreadsService) Counts(ctx context.Context, opts ...RequestOption) (Obj
 	o := newCallOptions("threads.counts", opts)
 
 	return s.t.object(ctx, o, call{path: paths.ThreadsCounts, query: values{{query.Address, o.value("address")}, {query.HideLabelled, o.value("hideLabelled")}}})
+}
+
+func (s *ThreadsService) WaitForEmail(ctx context.Context, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("threads.waitForEmail", opts)
+
+	return s.t.object(ctx, o, call{
+		path:     paths.ThreadsWait,
+		query:    values{{query.Address, o.value("address")}, {query.From, o.value("from")}, {query.Subject, o.value("subject")}, {query.Since, o.value("since")}, {query.Timeout, o.value("timeout")}},
+		deadline: threadWaitDeadline(o),
+	})
+}
+
+func threadWaitDeadline(o *callOptions) time.Duration {
+	seconds := protocol.ThreadWaitDefaultTimeoutSeconds
+
+	if chosen, given := o.value("timeout").(int); given {
+		seconds = chosen
+	}
+
+	return time.Duration(seconds+protocol.ThreadWaitDeadlineMarginSeconds) * time.Second
 }
 
 func (s *ThreadsService) Summary(ctx context.Context, id string, opts ...RequestOption) (Object, error) {

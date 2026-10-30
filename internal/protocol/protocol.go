@@ -17,6 +17,7 @@ const ContentTypesJSON = "application/json"
 const ContentTypesCalendar = "text/calendar"
 const ContentTypesVcard = "text/vcard"
 const ContentTypesOctetStream = "application/octet-stream"
+const ContentTypesEventStream = "text/event-stream"
 
 const CursorStylesCursorParam = "cursor"
 const CursorStylesCursorField = "nextCursor"
@@ -54,6 +55,19 @@ var ErrorTypeByStatus = map[int]string{
 	429: "rate_limit_error",
 }
 
+const EventStreamFieldsEvent = "event"
+const EventStreamFieldsData = "data"
+const EventStreamFieldsID = "id"
+const EventStreamFieldsRetry = "retry"
+
+const EventStreamSyntaxDefaultEvent = "message"
+const EventStreamSyntaxColon = ":"
+const EventStreamSyntaxSpace = " "
+const EventStreamSyntaxNull = "\u0000"
+const EventStreamSyntaxLineFeed = "\n"
+const EventStreamSyntaxCarriageReturn = "\r"
+const EventStreamSyntaxMaxBlockChars = 1048576
+
 const HeaderKeysAuthorization = "Authorization"
 const HeaderKeysAccept = "Accept"
 const HeaderKeysContentType = "Content-Type"
@@ -61,6 +75,7 @@ const HeaderKeysUserAgent = "User-Agent"
 const HeaderKeysIdempotencyKey = "Idempotency-Key"
 const HeaderKeysRetryAfter = "retry-after"
 const HeaderKeysRequestID = "x-request-id"
+const HeaderKeysLastEventID = "Last-Event-ID"
 
 const IdempotencyKeyPrefix = "nm-"
 
@@ -72,6 +87,16 @@ var LanguageAliases = [][]string{{"zh", "zh-Hans"}, {"zh-cn", "zh-Hans"}, {"zh-s
 
 const ListSeparator = ","
 
+const LiveStreamEventsReady = "ready"
+const LiveStreamEventsReset = "reset"
+const LiveStreamEventsEnd = "end"
+
+const LiveStreamTimingBaseBackoffMs = 1000
+const LiveStreamTimingMaxBackoffMs = 30000
+const LiveStreamTimingDefaultRetryMs = 3000
+const LiveStreamTimingMaxRetryAfterMs = 300000
+const LiveStreamTimingIdleTimeoutMs = 60000
+
 var LocalHosts = []string{"localhost", "::1", "[::1]", "127.0.0.1", "0.0.0.0", "::", "[::]"}
 
 var LoopbackHostnames = []string{"localhost", "::1", "[::1]"}
@@ -79,6 +104,8 @@ var LoopbackHostnames = []string{"localhost", "::1", "[::1]"}
 const LoopbackIpv4Address = "127.0.0.1"
 
 const LoopbackIpv6Address = "[::1]"
+
+const MediaTypeParameterSeparator = ";"
 
 var RetryStatuses = []int{408, 429, 500, 502, 503, 504}
 var RetryMethods = []string{"GET"}
@@ -97,6 +124,9 @@ const StepUpErrorCodesStepUpUndeliverable = "step_up_undeliverable"
 const StepUpErrorCodesStepUpCodeInvalid = "step_up_code_invalid"
 const StepUpErrorCodesStepUpCodeExpired = "step_up_code_expired"
 const StepUpErrorCodesStepUpLocked = "step_up_locked"
+
+const ThreadWaitDefaultTimeoutSeconds = 30
+const ThreadWaitDeadlineMarginSeconds = 15
 
 var UnspecifiedHostnames = []string{"0.0.0.0", "::", "[::]"}
 

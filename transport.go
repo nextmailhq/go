@@ -95,6 +95,8 @@ type call struct {
 	idempotent  bool
 	repeatable  bool
 	accept      string
+	headers     []header
+	deadline    time.Duration
 	upload      bool
 	turn        bool
 }
@@ -126,6 +128,7 @@ type transport struct {
 	sleep       func(ctx context.Context, wait time.Duration) error
 	now         func() time.Time
 	jitter      func() float64
+	live        liveTiming
 }
 
 func newTransport(config *clientConfig, credentialRequired bool) *transport {
@@ -144,6 +147,7 @@ func newTransport(config *clientConfig, credentialRequired bool) *transport {
 		sleep:       pause,
 		now:         time.Now,
 		jitter:      mathrand.Float64,
+		live:        defaultLiveTiming(),
 	}
 
 	if t.client == nil {
@@ -246,7 +250,11 @@ func pause(ctx context.Context, wait time.Duration) error {
 }
 
 func (t *transport) backoff(attempt int) time.Duration {
-	ceiling := math.Min(protocol.RetryMaxBackoffMs, protocol.RetryBaseBackoffMs*math.Pow(2, float64(attempt)))
+	return t.backoffWithin(attempt, protocol.RetryBaseBackoffMs, protocol.RetryMaxBackoffMs)
+}
+
+func (t *transport) backoffWithin(attempt int, baseMs, ceilingMs float64) time.Duration {
+	ceiling := math.Min(ceilingMs, baseMs*math.Pow(2, float64(attempt)))
 
 	return time.Duration(math.Round(ceiling*(0.5+t.jitter()*0.5))) * time.Millisecond
 }
@@ -293,17 +301,13 @@ func retryAfterSeconds(value string, now time.Time) (float64, bool) {
 	return math.Max(0, math.Ceil(at.Sub(now).Seconds())), true
 }
 
-func (t *transport) execute(ctx context.Context, options *callOptions, request call) (*reply, error) {
+func (t *transport) prepare(ctx context.Context, options *callOptions, request call) (string, string, []header, error) {
 	if t.err != nil {
-		return nil, t.err
+		return "", "", nil, t.err
 	}
 
 	if options.err != nil {
-		return nil, options.err
-	}
-
-	if ctx == nil {
-		ctx = context.Background()
+		return "", "", nil, options.err
 	}
 
 	method := strings.ToUpper(request.method)
@@ -313,22 +317,36 @@ func (t *transport) execute(ctx context.Context, options *callOptions, request c
 	}
 
 	if !headerNamePattern.MatchString(method) {
-		return nil, argumentError(messageMethodShape)
+		return "", "", nil, argumentError(messageMethodShape)
 	}
 
 	path, err := fillPath(request.path, request.params)
 
 	if err != nil {
-		return nil, err
+		return "", "", nil, err
 	}
 
 	target, err := buildURL(t.baseURL, path, request.query.merge(options.extra))
 
 	if err != nil {
-		return nil, err
+		return "", "", nil, err
 	}
 
 	headers, err := t.headersFor(ctx, options, request)
+
+	if err != nil {
+		return "", "", nil, err
+	}
+
+	return method, target, headers, nil
+}
+
+func (t *transport) execute(ctx context.Context, options *callOptions, request call) (*reply, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
+
+	method, target, headers, err := t.prepare(ctx, options, request)
 
 	if err != nil {
 		return nil, err
@@ -392,6 +410,10 @@ func (t *transport) timeoutFor(options *callOptions, request call) time.Duration
 		return chosen
 	}
 
+	if request.deadline > 0 {
+		return request.deadline
+	}
+
 	if request.upload && t.timeout > 0 {
 		return max(t.timeout, protocol.DefaultsUploadTimeoutMs*time.Millisecond)
 	}
@@ -430,7 +452,7 @@ func bodyBytes(request call) ([]byte, error) {
 }
 
 func (t *transport) headersFor(ctx context.Context, options *callOptions, request call) ([]header, error) {
-	headers := slices.Clone(t.headers())
+	headers := append(slices.Clone(t.headers()), request.headers...)
 	accept := request.accept
 
 	if accept == "" {

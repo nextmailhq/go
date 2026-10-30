@@ -42,6 +42,23 @@ func (s *EmailsService) Send(ctx context.Context, body Body, opts ...RequestOpti
 	})
 }
 
+func (s *EmailsService) SendRaw(ctx context.Context, body Body, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("emails.sendRaw", opts)
+	wire, err := emailRawToWire(body)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return s.t.object(ctx, o, call{
+		path:       paths.EmailsRaw,
+		method:     http.MethodPost,
+		body:       wire,
+		idempotent: true,
+		repeatable: true,
+	})
+}
+
 func (s *EmailsService) SendBatch(ctx context.Context, emails []Body, opts ...RequestOption) (*BatchResult, error) {
 	o := newCallOptions("emails.sendBatch", opts)
 	wire := make([]Body, 0, len(emails))

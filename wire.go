@@ -28,6 +28,7 @@ const (
 	fieldFilename        = "filename"
 	fieldContent         = "content"
 	fieldContentType     = "contentType"
+	fieldRaw             = "raw"
 	replacementCharacter = "\uFFFD"
 )
 
@@ -344,6 +345,44 @@ func recipientsToWire(body Body) Body {
 
 func emailToWire(body Body) (Body, error) {
 	return attachmentsToWire(recipientsToWire(body))
+}
+
+func emailRawToWire(body Body) (Body, error) {
+	wire := recipientsToWire(body)
+	raw, present := wire[fieldRaw]
+
+	if !present {
+		return wire, nil
+	}
+
+	encoded, err := rawContent(raw)
+
+	if err != nil {
+		return nil, err
+	}
+
+	wire[fieldRaw] = encoded
+
+	return wire, nil
+}
+
+func rawContent(value any) (string, error) {
+	switch typed := value.(type) {
+	case string:
+		return typed, nil
+	case []byte:
+		return base64.StdEncoding.EncodeToString(typed), nil
+	case io.Reader:
+		data, err := io.ReadAll(typed)
+
+		if err != nil {
+			return "", argumentFailure(err, messageRawUnreadable, err.Error())
+		}
+
+		return base64.StdEncoding.EncodeToString(data), nil
+	}
+
+	return "", argumentError(messageRawContent)
 }
 
 func attachmentsToWire(body Body) (Body, error) {

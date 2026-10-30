@@ -19,6 +19,16 @@ func calendarRangeQuery(from, to time.Time, o *callOptions) values {
 		{query.Timezone, o.value("timezone")},
 		{query.IncludeTeam, o.value("includeTeam")},
 		{query.Q, o.value("q")},
+		{query.CalendarIDs, o.value("calendarIds")},
+	}
+}
+
+func calendarTodoQuery(o *callOptions) values {
+	return values{
+		{query.CalendarIDs, o.value("calendarIds")},
+		{query.State, o.value("state")},
+		{query.DueBefore, o.value("dueBefore")},
+		{query.DueAfter, o.value("dueAfter")},
 	}
 }
 
@@ -156,6 +166,163 @@ func (s *CalendarService) DeclineProposal(ctx context.Context, id string, body B
 	})
 }
 
+func (s *CalendarService) ListCalendars(ctx context.Context, opts ...RequestOption) ([]Object, error) {
+	o := newCallOptions("calendar.listCalendars", opts)
+
+	return s.t.objects(ctx, o, call{path: paths.CalendarCalendars, query: values{{query.Kind, o.value("kind")}}})
+}
+
+func (s *CalendarService) GetCalendar(ctx context.Context, id string, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("calendar.getCalendar", opts)
+
+	return s.t.object(ctx, o, call{path: paths.CalendarCalendar, params: []any{"id", id}})
+}
+
+func (s *CalendarService) CreateCalendar(ctx context.Context, body Body, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("calendar.createCalendar", opts)
+
+	return s.t.object(ctx, o, call{
+		path:   paths.CalendarCalendars,
+		method: http.MethodPost,
+		body:   bodyOf(body),
+	})
+}
+
+func (s *CalendarService) UpdateCalendar(ctx context.Context, id string, patch Body, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("calendar.updateCalendar", opts)
+
+	return s.t.object(ctx, o, call{
+		path:   paths.CalendarCalendar,
+		params: []any{"id", id},
+		method: http.MethodPatch,
+		body:   bodyOf(patch),
+	})
+}
+
+func (s *CalendarService) DeleteCalendar(ctx context.Context, id string, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("calendar.deleteCalendar", opts)
+
+	return s.t.object(ctx, o, call{
+		path:   paths.CalendarCalendar,
+		params: []any{"id", id},
+		method: http.MethodDelete,
+		query:  values{{query.NotifyGuests, o.value("notifyGuests")}},
+	})
+}
+
+func (s *CalendarService) SetCalendarMember(ctx context.Context, id string, memberID string, body Body, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("calendar.setCalendarMember", opts)
+
+	return s.t.object(ctx, o, call{
+		path:       paths.CalendarCalendarMember,
+		params:     []any{"id", id, "memberId", memberID},
+		method:     http.MethodPut,
+		body:       bodyOf(body),
+		repeatable: true,
+	})
+}
+
+func (s *CalendarService) RemoveCalendarMember(ctx context.Context, id string, memberID string, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("calendar.removeCalendarMember", opts)
+
+	return s.t.object(ctx, o, call{
+		path:   paths.CalendarCalendarMember,
+		params: []any{"id", id, "memberId", memberID},
+		method: http.MethodDelete,
+	})
+}
+
+func (s *CalendarService) ListTodos(ctx context.Context, opts ...RequestOption) (*Page, error) {
+	o := newCallOptions("calendar.listTodos", opts)
+
+	return s.t.page(ctx, o, call{path: paths.CalendarTodos, query: calendarTodoQuery(o)}, cursorPages)
+}
+
+func (s *CalendarService) ListAllTodos(ctx context.Context, opts ...RequestOption) ([]Object, error) {
+	o := newCallOptions("calendar.listAllTodos", opts)
+
+	return s.t.all(ctx, o, call{path: paths.CalendarTodos, query: calendarTodoQuery(o)}, cursorPages)
+}
+
+func (s *CalendarService) IterateTodos(ctx context.Context, opts ...RequestOption) *Iterator {
+	o := newCallOptions("calendar.iterateTodos", opts)
+
+	return s.t.iterate(ctx, o, call{path: paths.CalendarTodos, query: calendarTodoQuery(o)}, cursorPages)
+}
+
+func (s *CalendarService) GetTodo(ctx context.Context, id string, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("calendar.getTodo", opts)
+
+	return s.t.object(ctx, o, call{path: paths.CalendarTodo, params: []any{"id", id}})
+}
+
+func (s *CalendarService) CreateTodo(ctx context.Context, body Body, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("calendar.createTodo", opts)
+
+	return s.t.object(ctx, o, call{
+		path:   paths.CalendarTodos,
+		method: http.MethodPost,
+		body:   bodyOf(body),
+	})
+}
+
+func (s *CalendarService) UpdateTodo(ctx context.Context, id string, patch Body, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("calendar.updateTodo", opts)
+
+	return s.t.object(ctx, o, call{
+		path:   paths.CalendarTodo,
+		params: []any{"id", id},
+		method: http.MethodPatch,
+		body:   bodyOf(patch),
+	})
+}
+
+func (s *CalendarService) DeleteTodo(ctx context.Context, id string, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("calendar.deleteTodo", opts)
+
+	return s.t.object(ctx, o, call{
+		path:   paths.CalendarTodo,
+		params: []any{"id", id},
+		method: http.MethodDelete,
+	})
+}
+
+func (s *CalendarService) ListCalendarLogins(ctx context.Context, opts ...RequestOption) ([]Object, error) {
+	o := newCallOptions("calendar.listCalendarLogins", opts)
+
+	return s.t.objects(ctx, o, call{path: paths.CalendarLogins, query: values{{query.Member, o.value("member")}}})
+}
+
+func (s *CalendarService) CreateCalendarLogin(ctx context.Context, body Body, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("calendar.createCalendarLogin", opts)
+
+	return s.t.object(ctx, o, call{
+		path:   paths.CalendarLogins,
+		method: http.MethodPost,
+		body:   bodyOf(body),
+	})
+}
+
+func (s *CalendarService) RevokeCalendarLogin(ctx context.Context, id string, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("calendar.revokeCalendarLogin", opts)
+
+	return s.t.object(ctx, o, call{
+		path:   paths.CalendarLogin,
+		params: []any{"id", id},
+		method: http.MethodDelete,
+	})
+}
+
+func (s *CalendarService) CreateCalendarLoginProfileLink(ctx context.Context, body Body, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("calendar.createCalendarLoginProfileLink", opts)
+
+	return s.t.object(ctx, o, call{
+		path:   paths.CalendarLoginProfileLink,
+		method: http.MethodPost,
+		body:   bodyOf(body),
+	})
+}
+
 func (s *CalendarService) ListFeeds(ctx context.Context, opts ...RequestOption) ([]Object, error) {
 	o := newCallOptions("calendar.listFeeds", opts)
 
@@ -245,7 +412,7 @@ func (s *CalendarService) ImportIcs(ctx context.Context, data io.Reader, opts ..
 	return s.t.object(ctx, o, call{
 		path:        paths.CalendarImports,
 		method:      http.MethodPost,
-		query:       values{{query.Filename, o.value("filename")}},
+		query:       values{{query.Filename, o.value("filename")}, {query.CalendarID, o.value("calendarId")}},
 		raw:         data,
 		sendsRaw:    true,
 		contentType: protocol.ContentTypesCalendar,

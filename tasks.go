@@ -9,7 +9,7 @@ import (
 )
 
 func tasksListQuery(o *callOptions) values {
-	return values{{query.Status, o.value("status")}}
+	return values{{query.Status, o.value("status")}, {query.ChatID, o.value("chatId")}}
 }
 
 func tasksRunQuery(o *callOptions) values {

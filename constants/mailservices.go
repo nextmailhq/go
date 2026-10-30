@@ -11,6 +11,7 @@ const (
 	MailServicesProton    = "proton"
 	MailServicesZoho      = "zoho"
 	MailServicesFastmail  = "fastmail"
+	MailServicesOpenemail = "openemail"
 	MailServicesResend    = "resend"
 	MailServicesSendgrid  = "sendgrid"
 	MailServicesMailgun   = "mailgun"
@@ -23,5 +24,5 @@ const (
 )
 
 func MailServicesValues() []string {
-	return []string{MailServicesPlatform, MailServicesGmail, MailServicesOutlook, MailServicesIcloud, MailServicesYahoo, MailServicesProton, MailServicesZoho, MailServicesFastmail, MailServicesResend, MailServicesSendgrid, MailServicesMailgun, MailServicesPostmark, MailServicesMailchimp, MailServicesBrevo, MailServicesSparkpost, MailServicesHubspot, MailServicesAmazonSes}
+	return []string{MailServicesPlatform, MailServicesGmail, MailServicesOutlook, MailServicesIcloud, MailServicesYahoo, MailServicesProton, MailServicesZoho, MailServicesFastmail, MailServicesOpenemail, MailServicesResend, MailServicesSendgrid, MailServicesMailgun, MailServicesPostmark, MailServicesMailchimp, MailServicesBrevo, MailServicesSparkpost, MailServicesHubspot, MailServicesAmazonSes}
 }

@@ -21,6 +21,7 @@ func contactsCardQuery(o *callOptions) values {
 		{query.WithoutEmail, o.value("withoutEmail")},
 		{query.Kind, o.value("kind")},
 		{query.GroupID, o.value("groupId")},
+		{query.AddressBook, o.value("addressBook")},
 	}
 }
 
@@ -351,6 +352,34 @@ func (s *ContactsService) MergeCards(ctx context.Context, id string, body Body, 
 		params: []any{"id", id},
 		method: http.MethodPost,
 		body:   bodyOf(body),
+	})
+}
+
+func (s *ContactsService) ListAddressBooks(ctx context.Context, opts ...RequestOption) ([]Object, error) {
+	o := newCallOptions("contacts.listAddressBooks", opts)
+
+	return s.t.objects(ctx, o, call{path: paths.AddressBooks})
+}
+
+func (s *ContactsService) SetAddressBookMember(ctx context.Context, id string, memberID string, body Body, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("contacts.setAddressBookMember", opts)
+
+	return s.t.object(ctx, o, call{
+		path:       paths.AddressBookMember,
+		params:     []any{"id", id, "memberId", memberID},
+		method:     http.MethodPut,
+		body:       bodyOf(body),
+		repeatable: true,
+	})
+}
+
+func (s *ContactsService) RemoveAddressBookMember(ctx context.Context, id string, memberID string, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("contacts.removeAddressBookMember", opts)
+
+	return s.t.object(ctx, o, call{
+		path:   paths.AddressBookMember,
+		params: []any{"id", id, "memberId", memberID},
+		method: http.MethodDelete,
 	})
 }
 

@@ -11,8 +11,9 @@ const (
 	AddressRouteInactiveReasonsRewriteDomainRemoved = "rewrite_domain_removed"
 	AddressRouteInactiveReasonsForwardPending       = "forward_pending"
 	AddressRouteInactiveReasonsForwardRefused       = "forward_refused"
+	AddressRouteInactiveReasonsForwardBounced       = "forward_bounced"
 )
 
 func AddressRouteInactiveReasonsValues() []string {
-	return []string{AddressRouteInactiveReasonsSwitchedOff, AddressRouteInactiveReasonsTargetRemoved, AddressRouteInactiveReasonsTargetDisabled, AddressRouteInactiveReasonsWebhookDeleted, AddressRouteInactiveReasonsWebhookDisabled, AddressRouteInactiveReasonsRewriteDomainRemoved, AddressRouteInactiveReasonsForwardPending, AddressRouteInactiveReasonsForwardRefused}
+	return []string{AddressRouteInactiveReasonsSwitchedOff, AddressRouteInactiveReasonsTargetRemoved, AddressRouteInactiveReasonsTargetDisabled, AddressRouteInactiveReasonsWebhookDeleted, AddressRouteInactiveReasonsWebhookDisabled, AddressRouteInactiveReasonsRewriteDomainRemoved, AddressRouteInactiveReasonsForwardPending, AddressRouteInactiveReasonsForwardRefused, AddressRouteInactiveReasonsForwardBounced}
 }
