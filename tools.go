@@ -26,6 +26,27 @@ func (s *ToolsService) CheckDeliverability(ctx context.Context, domain string, o
 	return s.t.object(ctx, o, call{path: paths.ToolsDeliverability, query: values{{query.Domain, domain}}})
 }
 
+func (s *ToolsService) CheckSpf(ctx context.Context, domain string, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("tools.checkSpf", opts)
+
+	return s.t.object(ctx, o, call{path: paths.ToolsSpf, query: values{{query.Domain, domain}}})
+}
+
+func (s *ToolsService) CheckDkim(ctx context.Context, domain string, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("tools.checkDkim", opts)
+
+	return s.t.object(ctx, o, call{
+		path:  paths.ToolsDkim,
+		query: values{{query.Domain, domain}, {query.Selector, o.value("selector")}},
+	})
+}
+
+func (s *ToolsService) CheckMx(ctx context.Context, domain string, opts ...RequestOption) (Object, error) {
+	o := newCallOptions("tools.checkMx", opts)
+
+	return s.t.object(ctx, o, call{path: paths.ToolsMx, query: values{{query.Domain, domain}}})
+}
+
 func (s *ToolsService) ReadVerificationCode(ctx context.Context, body Body, opts ...RequestOption) (Object, error) {
 	o := newCallOptions("tools.readVerificationCode", opts)
 

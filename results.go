@@ -171,6 +171,13 @@ type PeoplePage struct {
 	Seen       bool
 }
 
+type NotificationPage struct {
+	Items       []Object
+	UnreadCount int
+	HasMore     bool
+	NextCursor  string
+}
+
 type TempMessagesPage struct {
 	Items      []Object
 	HasMore    bool

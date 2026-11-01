@@ -52,6 +52,7 @@ type (
 	FilesService              service
 	KnowledgeService          service
 	TempMailService           service
+	SignupsService            service
 	ExportsService            service
 	ChatsService              service
 	EncryptionService         service
@@ -63,6 +64,7 @@ type (
 	DNSConnectionsService     service
 	WorkspacesService         service
 	AccountService            service
+	NotificationsService      service
 	SignaturesService         service
 	TasksService              service
 	BookingsService           service
@@ -112,6 +114,7 @@ type Client struct {
 	Files              *FilesService
 	Knowledge          *KnowledgeService
 	TempMail           *TempMailService
+	Signups            *SignupsService
 	Exports            *ExportsService
 	Chats              *ChatsService
 	Encryption         *EncryptionService
@@ -123,6 +126,7 @@ type Client struct {
 	DNSConnections     *DNSConnectionsService
 	Workspaces         *WorkspacesService
 	Account            *AccountService
+	Notifications      *NotificationsService
 	Signatures         *SignaturesService
 	Tasks              *TasksService
 	Bookings           *BookingsService
@@ -190,6 +194,7 @@ func New(opts ...ClientOption) *Client {
 	client.Files = (*FilesService)(&client.common)
 	client.Knowledge = (*KnowledgeService)(&client.common)
 	client.TempMail = (*TempMailService)(&client.common)
+	client.Signups = (*SignupsService)(&client.common)
 	client.Exports = (*ExportsService)(&client.common)
 	client.Chats = (*ChatsService)(&client.common)
 	client.Encryption = (*EncryptionService)(&client.common)
@@ -201,6 +206,7 @@ func New(opts ...ClientOption) *Client {
 	client.DNSConnections = (*DNSConnectionsService)(&client.common)
 	client.Workspaces = (*WorkspacesService)(&client.common)
 	client.Account = (*AccountService)(&client.common)
+	client.Notifications = (*NotificationsService)(&client.common)
 	client.Signatures = (*SignaturesService)(&client.common)
 	client.Tasks = (*TasksService)(&client.common)
 	client.Bookings = (*BookingsService)(&client.common)
@@ -221,6 +227,16 @@ func NewTempMail(opts ...ClientOption) *TempMailService {
 	}
 
 	return (*TempMailService)(&service{t: newTransport(config, false)})
+}
+
+func NewSignups(opts ...ClientOption) *SignupsService {
+	config := configOf(opts)
+
+	if config.hasAPIKey || config.hasToken || config.inboxToken.present() {
+		config.fail(argumentError(messageSignupsCredential))
+	}
+
+	return (*SignupsService)(&service{t: newTransport(config, false)})
 }
 
 func configOf(opts []ClientOption) *clientConfig {

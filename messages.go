@@ -14,6 +14,7 @@ const (
 	messageAccessTokenFailed    = "The WithAccessTokenFunc function failed: %s"
 	messageInboxTokenClient     = "WithInboxToken applies to NewTempMail and to the temp mail calls, not to New. A client carries an API key or an access token."
 	messageTempMailCredential   = "NewTempMail takes no API key and no access token. Disposable inboxes are public, and each call names its inbox with WithInboxToken."
+	messageSignupsCredential    = "NewSignups takes no API key, no access token and no inbox token. A sign-up is anonymous, and Signups.Verify returns the API key of the new account."
 	messageBaseURLShape         = "is not a usable base URL. Pass an https origin such as \"https://api.nextmail.sh\". Plain http is for a server on this machine only, at localhost, a 127.x.x.x address or ::1, because the client never sends a credential over plain http to any other host."
 	messageBaseURLUserInfo      = "A base URL must not carry a user name or password. Pass the origin alone and the credential with WithAPIKey or WithAccessToken."
 	messageCleartext            = "Refused to send a credential to %s over plain http, where anyone on the network can read it. Use an https base URL. Plain http is accepted only for a server on this machine: localhost, a 127.x.x.x address or ::1."

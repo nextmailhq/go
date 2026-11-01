@@ -158,13 +158,17 @@ func (s *TemplatesService) DeleteVersion(ctx context.Context, idOrSlug string, v
 func (s *TemplatesService) ListStarters(ctx context.Context, opts ...RequestOption) ([]Object, error) {
 	o := newCallOptions("templates.listStarters", opts)
 
-	return s.t.objects(ctx, o, call{path: paths.TemplateStarters})
+	return s.t.objects(ctx, o, call{path: paths.TemplateStarters, query: values{{query.Category, o.value("category")}}})
 }
 
 func (s *TemplatesService) GetStarter(ctx context.Context, slug string, opts ...RequestOption) (Object, error) {
 	o := newCallOptions("templates.getStarter", opts)
 
-	return s.t.object(ctx, o, call{path: paths.TemplateStarter, params: []any{"slug", slug}})
+	return s.t.object(ctx, o, call{
+		path:   paths.TemplateStarter,
+		params: []any{"slug", slug},
+		query:  values{{query.Style, o.value("style")}},
+	})
 }
 
 func (s *TemplatesService) ListFonts(ctx context.Context, opts ...RequestOption) ([]Object, error) {

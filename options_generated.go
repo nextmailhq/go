@@ -122,6 +122,10 @@ func WithDaysWindow(days string) RequestOption {
 	return callOption{function: "WithDaysWindow", name: "days", value: days}
 }
 
+func WithDeclineInvitations(declineInvitations bool) RequestOption {
+	return callOption{function: "WithDeclineInvitations", name: "declineInvitations", value: declineInvitations}
+}
+
 func WithDeep(deep bool) RequestOption {
 	return callOption{function: "WithDeep", name: "deep", value: deep}
 }
@@ -402,6 +406,10 @@ func WithSearch(search string) RequestOption {
 	return callOption{function: "WithSearch", name: "search", value: search}
 }
 
+func WithSelector(selector string) RequestOption {
+	return callOption{function: "WithSelector", name: "selector", value: selector}
+}
+
 func WithSemantic(semantic bool) RequestOption {
 	return callOption{function: "WithSemantic", name: "semantic", value: semantic}
 }
@@ -444,6 +452,10 @@ func WithStatusCodes(statuses ...int) RequestOption {
 
 func WithStepKey(stepKey string) RequestOption {
 	return callOption{function: "WithStepKey", name: "stepKey", value: stepKey}
+}
+
+func WithStyle(style string) RequestOption {
+	return callOption{function: "WithStyle", name: "style", value: style}
 }
 
 func WithSubject(subject string) RequestOption {
@@ -590,8 +602,8 @@ var methodOptions = map[string][]string{
 	"templates.publish":                       {"WithExpectedVersion", "WithExpectedUpdatedAt", "WithAPIKey"},
 	"templates.restoreVersion":                {"WithAPIKey"},
 	"templates.deleteVersion":                 {"WithAPIKey"},
-	"templates.listStarters":                  {"WithAPIKey"},
-	"templates.getStarter":                    {"WithAPIKey"},
+	"templates.listStarters":                  {"WithCategory", "WithAPIKey"},
+	"templates.getStarter":                    {"WithStyle", "WithAPIKey"},
 	"templates.listFonts":                     {"WithAPIKey"},
 	"templates.render":                        {"WithAPIKey"},
 	"templates.preview":                       {"WithAPIKey"},
@@ -1113,9 +1125,14 @@ var methodOptions = map[string][]string{
 	"tempMail.getMessage":                     {"WithInboxToken"},
 	"tempMail.deleteMessage":                  {"WithInboxToken"},
 	"tempMail.listAttachments":                {"WithInboxToken"},
+	"signups.create":                          {"WithAPIKey"},
+	"signups.verify":                          {"WithAPIKey"},
 	"tools.checkDmarc":                        {"WithAPIKey"},
 	"tools.checkBimi":                         {"WithAPIKey"},
 	"tools.checkDeliverability":               {"WithAPIKey"},
+	"tools.checkSpf":                          {"WithAPIKey"},
+	"tools.checkDkim":                         {"WithSelector", "WithAPIKey"},
+	"tools.checkMx":                           {"WithAPIKey"},
 	"tools.readVerificationCode":              {"WithAPIKey"},
 	"tools.estimateCost":                      {"WithSends", "WithDomains", "WithPeople", "WithAiActions", "WithInterval", "WithAPIKey"},
 	"tools.checkAddress":                      {"WithDeep", "WithAPIKey"},
@@ -1217,6 +1234,11 @@ var methodOptions = map[string][]string{
 	"account.listOwnershipOffers":             {"WithAPIKey"},
 	"account.acceptOwnershipOffer":            {"WithAPIKey"},
 	"account.declineOwnershipOffer":           {"WithAPIKey"},
+	"notifications.list":                      {"WithLimit", "WithCursor", "WithAPIKey"},
+	"notifications.unreadCount":               {"WithAPIKey"},
+	"notifications.markRead":                  {"WithAPIKey"},
+	"notifications.markAllRead":               {"WithAPIKey"},
+	"notifications.clear":                     {"WithDeclineInvitations", "WithAPIKey"},
 	"signatures.list":                         {"WithAddress", "WithFromAddress", "WithLimit", "WithCursor", "WithAPIKey"},
 	"signatures.listAll":                      {"WithAddress", "WithFromAddress", "WithLimit", "WithCursor", "WithAPIKey"},
 	"signatures.iterate":                      {"WithAddress", "WithFromAddress", "WithLimit", "WithCursor", "WithAPIKey"},

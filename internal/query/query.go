@@ -118,4 +118,6 @@ const (
 	DueBefore       = "dueBefore"
 	DueAfter        = "dueAfter"
 	NotifyGuests    = "notifyGuests"
+	Style           = "style"
+	Selector        = "selector"
 )

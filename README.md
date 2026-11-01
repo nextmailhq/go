@@ -170,6 +170,32 @@ fmt.Println(len(messages.Items), messages.ExpiresAt)
 
 `Create` needs no credential and is the only call that returns the inbox token, so keep it.
 
+### Signing a person up
+```go
+signups := nextmail.NewSignups()
+
+signUp, err := signups.Create(ctx, nextmail.Body{"email": "ada@example.com", "agent": "Claude Code"})
+if err != nil {
+	return err
+}
+
+fmt.Print("The code sent to ", signUp.String("sentTo"), ": ")
+
+var code string
+fmt.Scanln(&code)
+
+account, err := signups.Verify(ctx, signUp.ID(), code)
+if err != nil {
+	return err
+}
+
+client := nextmail.New(nextmail.WithAPIKey(account.Object("apiKey").String("token")))
+
+fmt.Println(client.Mode())
+```
+
+An agent with no key starts a sign-up for a person's address, asks them for the six-digit code emailed to them, and gets back an API key for the new account. `account.Object("apiKey").String("token")` is shown only in that answer, so store it.
+
 ### OAuth access tokens
 An app a person connected to Nextmail with OAuth, such as a command line tool or an agent, holds an access token rather than an API key. Pass it with `nextmail.WithAccessToken`, or pass a function that returns it:
 
